@@ -7,7 +7,8 @@ from rich.markdown import Markdown
 from rich.progress_bar import ProgressBar as PB
 from rich.progress import track
 from rich.status import Status as ST
-from tqdm.rich import trange, tqdm
+#from tqdm.rich import trange, tqdm
+from tqdm import trange, tqdm
 from ffmpeg_progress_yield import FfmpegProgress
 import time
 import os
@@ -66,20 +67,20 @@ if is_rich_great:
     console.print(f"Download Started at {start}",style="#F3CCFF")
     console.print(f"executing ffmpeg command",style="blink #af00ff")
 
-    pbar = PB(
+    """pbar = PB(
         completed=0,
         total=100,
-        style="#F3CCFF")
+        style="#F3CCFF")"""
 
 
     cmd = [
         "ffmpeg", "-i", link, "-c", "copy", filename2
     ]
-    progs = 0
-    progress_text = f'Download progress: {progs} % '
+    #progs = 0
+    """    progress_text = f'Download progress: {progs} % '
     pbar_title = ST(
             status =progress_text,
-            spinner='dots')
+            spinner='dots')"""
     #console.print(pbar_title)
     #console.print(pbar)
     ff = FfmpegProgress(cmd)
@@ -89,7 +90,7 @@ if is_rich_great:
         progress_text = f'Download progress: {progs} % '
         pbar_title.update()
     """
-    with tqdm(total=100, position=1, desc="Test") as pbar:
+    with tqdm(total=100, position=1, desc="Downloading video: ") as pbar:
         for progs in ff.run_command_with_progress():
             pbar.update(progs - pbar.n)
     
