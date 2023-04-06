@@ -66,19 +66,18 @@ if is_rich_great:
     start = datetime.datetime.now()
     console.print(f"Download Started at {start}",style="#F3CCFF")
     console.print(f"executing ffmpeg command",style="blink #af00ff")
-    print(link)
-    """
-    pbar = PB(
+
+    """pbar = PB(
         completed=0,
         total=100,
-        style="#F3CCFF")
-    """
+        style="#F3CCFF")"""
+
 
     cmd = [
         "ffmpeg", "-i", link, "-c", "copy", filename2
     ]
     #progs = 0
-    """   progress_text = f'Download progress: {progs} % '
+    """    progress_text = f'Download progress: {progs} % '
     pbar_title = ST(
             status =progress_text,
             spinner='dots')"""
@@ -91,15 +90,10 @@ if is_rich_great:
         progress_text = f'Download progress: {progs} % '
         pbar_title.update()
     """
-    """used with tqdm version
     with tqdm(total=100, position=1, desc="Downloading video: ") as pbar:
         for progs in ff.run_command_with_progress():
             pbar.update(progs - pbar.n)
-    """        
-    from rich.progress import track
-    for steps in track(ff.run_command_with_progress()):
-        print(steps)
-
+    
     end = datetime.datetime.now()
     console.print(f"Download Ended at {end}", style="bold red")
     elapsed = end - start
