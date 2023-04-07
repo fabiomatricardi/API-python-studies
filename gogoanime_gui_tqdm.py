@@ -14,6 +14,7 @@ import time
 import os
 import requests
 import datetime
+import cv2  #to show the poster image thumbnail
 """
 Using ANIME API this software can collect information about specific Anime Series
 in GoGoAnime simply using the Anime id (easy detectable on gogoanime.ar. For 
@@ -27,6 +28,15 @@ GitHub Repo: https://github.com/riimuru/gogoanime-api#how-to-get-started
 API documentation
 https://docs.consumet.org/rest-api/Anime/gogoanime/get-anime-episode-streaming-linkshttps://docs.consumet.org/rest-api/Anime/gogoanime/get-anime-episode-streaming-links
 """
+# function to show the image thumbnail of the series
+def show_my_image(image_ur):
+    cap = cv2.VideoCapture(image_ur)  # Open the URL as video
+    success, image = cap.read()  # Read the image as a video frame
+    if success:
+        cv2.imshow('image ', image)  # Display the image for testing
+        cv2.waitKey()
+    cap.release()
+
 # Prepare console for display and Print operatons
 console = Console()
 console.clear(home=True)  #clear screen
@@ -48,6 +58,8 @@ console.print(mymdtitle)
 print(info['description'])
 mymaxepisode = Markdown(f"- Total Num of Episodes: {str(info['totalEpisodes'])}")
 console.print(mymaxepisode)
+console.print("[bold yellow]Verify your series looking at the Anime Poster")
+show_my_image(info['image'])
 # Select episode nuber for download section
 console.rule("[bold blue]Download Episode")
 singleEP = console.input(f'Episode Number you want to download? [bold red]1 - {eps}: ')
