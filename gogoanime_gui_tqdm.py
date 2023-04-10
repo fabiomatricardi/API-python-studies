@@ -7,6 +7,8 @@ from rich.markdown import Markdown
 from rich.progress_bar import ProgressBar as PB
 from rich.progress import track
 from rich.status import Status as ST
+from rich.progress import Progress, SpinnerColumn, TotalFileSizeColumn, TransferSpeedColumn, TimeElapsedColumn, TextColumn, BarColumn
+
 #from tqdm.rich import trange, tqdm
 from tqdm import trange, tqdm
 from ffmpeg_progress_yield import FfmpegProgress
@@ -78,33 +80,21 @@ if is_rich_great:
     start = datetime.datetime.now()
     console.print(f"Download Started at {start}",style="#F3CCFF")
     console.print(f"executing ffmpeg command",style="blink #af00ff")
-
-    """pbar = PB(
-        completed=0,
-        total=100,
-        style="#F3CCFF")"""
-
-
+ 
     cmd = [
         "ffmpeg", "-i", link, "-c", "copy", filename2
     ]
-    #progs = 0
-    """    progress_text = f'Download progress: {progs} % '
-    pbar_title = ST(
-            status =progress_text,
-            spinner='dots')"""
-    #console.print(pbar_title)
-    #console.print(pbar)
+
     ff = FfmpegProgress(cmd)
-    """    
-    for progs in track(ff.run_command_with_progress()):
-        pbar.update(completed=progs, total=100) 
-        progress_text = f'Download progress: {progs} % '
-        pbar_title.update()
-    """
-    with tqdm(total=100, position=1, desc="Downloading video: ") as pbar:
+    
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("Completed {task.completed:^3.0f} %", justify="left", style="white"),
+        BarColumn(),) as progress:
+        task_download = progress.add_task("[red]Download...", total=100)
+        #progress.start()
         for progs in ff.run_command_with_progress():
-            pbar.update(progs - pbar.n)
+            progress.update(task_download, completed = progs)
     
     end = datetime.datetime.now()
     console.print(f"Download Ended at {end}", style="bold red")
