@@ -3,7 +3,8 @@ from rich import print
 from rich.panel import Panel
 from rich.prompt import Confirm
 from rich.markdown import Markdown
-from rich.progress import Progress, SpinnerColumn, TotalFileSizeColumn, TransferSpeedColumn, TimeElapsedColumn, TextColumn, BarColumn
+from rich.spinner import Spinner
+from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn, TotalFileSizeColumn, TransferSpeedColumn, TimeElapsedColumn, TextColumn, BarColumn
 from ffmpeg_progress_yield import FfmpegProgress
 import requests
 import datetime
@@ -68,7 +69,7 @@ if is_rich_great:
     link = data['sources'][0]['url']
     filename2= f"{serieName}-{singleEP}.mp4"
     f = f'ffmpeg -nostats -loglevel 0 -i {link} -c copy {filename2}'
-    start = datetime.datetime.now()
+    start = datetime.datetime.now() #not used now but useful
     console.print(f"Download Started at {start}",style="#F3CCFF")
     console.print(f"executing ffmpeg command",style="blink #af00ff")
     # RUN COMMAND WITH FFMPEG PROGRESS YIELD
@@ -78,16 +79,18 @@ if is_rich_great:
     ff = FfmpegProgress(cmd)
     # PROGRESS BAR
     with Progress(
-        SpinnerColumn(),
+        SpinnerColumn('bouncingBall'),
         TextColumn("Completed {task.completed:^3.0f} %", justify="left", style="white"),
-        BarColumn(),) as progress:
+        BarColumn(),
+        TimeElapsedColumn(),
+        ) as progress:
         task_download = progress.add_task("[red]Download...", total=100)
         for progs in ff.run_command_with_progress():
             progress.update(task_download, completed = progs)
     # TAKE FINAL TIME
-    end = datetime.datetime.now()
-    console.print(f"Download Ended at {end}", style="bold red")
-    elapsed = end - start
-    print("---------------")
-    console.print(f"completed in {elapsed}",style="bold #16FF00")
+    end = datetime.datetime.now() #not used now but useful
+    #console.print(f"Download Ended at {end}", style="bold red")
+    elapsed = end - start #not used now but useful
+    #print("---------------")
+    #console.print(f"completed in {elapsed}",style="bold #16FF00")
 console.rule("[bold blue]Bye Bye")
